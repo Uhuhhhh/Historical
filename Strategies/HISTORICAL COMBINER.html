@@ -12,6 +12,24 @@
 
 <style>
 
+.contactText{
+    text-align:center;
+    color:#999;
+    font-size:14px;
+    margin-top:10px;
+}
+
+.contactText a{
+    color:#FFC857;   /* Light orange */
+    text-decoration:none;
+    font-weight:700;
+}
+
+.contactText a:hover{
+    color:#FFD97A;
+    text-decoration:underline;
+}
+
 .topRight{
 
 display:flex;
@@ -1161,10 +1179,21 @@ color:gold;
         placeholder="Password">
 
         <button id="unlockBtn">
-            UNLOCK
-        </button>
+    UNLOCK
+</button>
 
-        <div id="errorMsg"></div>
+<div class="divider">
+    <span>OR</span>
+</div>
+
+<p class="contactText">
+    Don't have access?
+    <a href="https://t.me/YOUR_USERNAME" target="_blank">
+        Contact Admin
+    </a>
+</p>
+
+<div id="errorMsg"></div>
 
     </div>
 
@@ -1227,15 +1256,17 @@ ELEVATE
 
 </div>
 
-<a href="index.html">🏠 Home</a>
+<a href="../index.html">🏠 Home</a>
 
-<a href="dashboard.html" class="active">📊 Dashboard</a>
+<a href="../dashboard.html" class="active">📊 Dashboard</a>
 
-<a href="strategy.html">🧠 Strategies</a>
+<a href="../strategy.html">🧠 Strategies</a>
 
-<a href="signal-history.html">📜 Signal History</a>
+<a href="../signal-history.html">📜 Signal History</a>
 
-<a href="settings.html">⚙ Settings</a>
+<a href="../settings.html">⚙ Settings</a>
+
+<a href="../rules.html">⚙ Rules</a>
 
 </aside>
 
@@ -1373,11 +1404,11 @@ async function sha256(text){
 
 const USERS = {
 
-"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b":"DEV-B2PRAY0U",
+"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b":"DEV-CIRJMTSO",
 
 "e7f6c011776e8db7cd330b54174fd76f7d0216b612387a5ffcfb81e6f0919683":"DEV-8CDVHPRP",
 
-"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b":"DEV-1ITISEAQ"
+"PASSWORD_HASH_3":"DEV-ZP8R6K11"
 
 };
 document.getElementById("unlockBtn").addEventListener("click", async()=>{
@@ -1392,6 +1423,7 @@ const hash =
 await sha256(entered);
 
 if(USERS[hash]===deviceId){
+
 document.getElementById("lockScreen").style.display="none";
 
 document.getElementById("mainApp").style.display="block";
