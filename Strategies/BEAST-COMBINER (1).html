@@ -1140,31 +1140,24 @@ if(signal === "CALL" || signal === "PUT"){
     expiry.setMinutes(expiry.getMinutes()+tf);
 
     saveSignal({
-
-        id:id,
-
-        time:now.toLocaleString(),
-
-        pair:market,
-
-        signal:signal,
-
-        confidence:score,
-
-        entry:entry.toLocaleTimeString(),
-
-        expiry:expiry.toLocaleTimeString(),
-
-        result:"Pending"
-
-    });
+    id:id,
+    time:now.toLocaleString(),
+    pair:market,
+    signal:signal,
+    confidence:score,
+    entry:entry.toLocaleTimeString(),
+    expiry:expiry.toLocaleTimeString(),
+    entryPrice:currentPrice,   // ADD THIS
+    result:"Pending"
+});
 
     checkTradeResult(
-        id,
-        signal,
-        market,
-        expiry
-    );
+    id,
+    signal,
+    market,
+    expiry,
+    currentPrice
+);
 
 }
 }
@@ -1216,7 +1209,8 @@ async function checkTradeResult(
 id,
 signal,
 market,
-expiryTime
+expiryTime,
+entryPrice
 ){
 
     const wait = expiryTime.getTime()-Date.now();
@@ -1263,9 +1257,7 @@ expiryTime
 
             const candles=data.values.reverse();
 
-            const entryPrice=parseFloat(candles[0].close);
-
-            const closePrice=parseFloat(candles[1].close);
+            const closePrice = parseFloat(candles[candles.length-1].close);
 
             let result="DRAW";
 
