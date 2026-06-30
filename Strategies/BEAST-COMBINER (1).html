@@ -1,0 +1,1297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+
+<title>Elevate Trading</title>
+
+<link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+
+<style>
+
+#lockScreen{
+
+    position:fixed;
+
+    inset:0;
+
+    background:#000;
+
+    display:flex;
+
+    justify-content:center;
+
+    align-items:center;
+
+    z-index:9999;
+}
+
+.lockBox{
+
+    width:90%;
+
+    max-width:350px;
+
+    background:#0d0d0d;
+
+    border:1px solid rgba(255,215,0,.25);
+
+    border-radius:25px;
+
+    padding:30px;
+
+    text-align:center;
+}
+
+.lockBox h1{
+
+    color:gold;
+
+    margin-bottom:15px;
+}
+
+.lockBox p{
+
+    color:#ccc;
+
+    margin-bottom:15px;
+}
+
+.lockBox input{
+
+    width:100%;
+
+    height:55px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:#111;
+
+    color:white;
+
+    padding:0 15px;
+}
+
+.lockBox button{
+
+    width:100%;
+
+    height:55px;
+
+    margin-top:15px;
+
+    border:none;
+
+    border-radius:15px;
+
+    background:gold;
+
+    color:black;
+
+    font-weight:900;
+}
+
+#errorMsg{
+
+    color:#ff4444;
+
+    margin-top:10px;
+}
+
+*{
+    margin:0;
+    padding:0;
+    box-sizing:border-box;
+    font-family:'Poppins',sans-serif;
+}
+
+body{
+    background:#000;
+    min-height:100vh;
+    color:white;
+}
+
+.wrapper{
+    max-width:450px;
+    margin:auto;
+    padding:15px;
+}
+
+.hero{
+
+    margin-top:20px;
+
+    background:linear-gradient(
+    135deg,
+    rgba(255,215,0,.15),
+    rgba(255,255,255,.03)
+    );
+
+    border-radius:30px;
+
+    padding:30px;
+
+    text-align:center;
+
+    border:1px solid rgba(255,215,0,.2);
+}
+
+.logo{
+
+    width:90px;
+    height:90px;
+
+    border-radius:50%;
+
+    margin:auto;
+
+    background:linear-gradient(
+    135deg,
+    gold,
+    #fff2a8
+    );
+
+    display:flex;
+    justify-content:center;
+    align-items:center;
+
+    font-size:40px;
+}
+
+.title{
+
+    margin-top:15px;
+
+    font-size:30px;
+
+    font-weight:900;
+
+    color:gold;
+}
+
+.subtitle{
+
+    margin-top:8px;
+
+    color:#aaa;
+
+    font-size:13px;
+
+    letter-spacing:2px;
+}
+.panel{
+
+    margin-top:20px;
+
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(255,215,0,.15);
+
+    border-radius:30px;
+
+    padding:20px;
+}
+
+.panel h2{
+
+    color:gold;
+
+    margin-bottom:20px;
+
+    text-align:center;
+}
+
+.generate-btn{
+
+    width:100%;
+
+    height:65px;
+
+    margin-top:15px;
+
+    border:none;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #FFD700,
+    #FFF2A8
+    );
+
+    color:#000;
+
+    font-size:18px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    box-shadow:
+    0 0 20px rgba(255,215,0,.3);
+}
+
+.signal-card{
+
+    margin-top:20px;
+
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(255,215,0,.15);
+
+    border-radius:30px;
+
+    padding:20px;
+
+    text-align:center;
+}
+
+.signal-title{
+
+    color:gold;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+}
+
+.signal-box{
+
+    height:110px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:42px;
+
+    font-weight:900;
+
+    background:#111;
+}
+
+.call{
+
+    background:
+    linear-gradient(
+    135deg,
+    #00ff88,
+    #00bb66
+    );
+
+    color:#fff;
+}
+
+.put{
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff4444,
+    #bb2222
+    );
+
+    color:#fff;
+}
+
+.signal-info{
+
+    margin-top:15px;
+
+    color:#ccc;
+
+    line-height:28px;
+}
+
+.field{
+
+    margin-bottom:15px;
+}
+
+.field label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#ccc;
+}
+
+.field select{
+
+    width:100%;
+
+    height:55px;
+
+    border:none;
+
+    outline:none;
+
+    background:#111;
+
+    color:white;
+
+    border-radius:15px;
+
+    padding:0 15px;
+}
+
+.clock{
+
+    margin-top:15px;
+
+    text-align:center;
+
+    font-size:24px;
+
+    font-weight:800;
+
+    color:gold;
+
+    background:#111;
+
+    padding:15px;
+
+    border-radius:15px;
+}
+
+</style>
+
+</head>
+
+<div id="lockScreen">
+
+    <div class="lockBox">
+
+        <h1>🔐 Elevate Trading</h1>
+
+        <p>Enter Password</p>
+
+        <input
+        type="password"
+        id="passwordInput"
+        placeholder="Password">
+
+        <button id="unlockBtn">
+            UNLOCK
+        </button>
+
+        <div id="errorMsg"></div>
+
+    </div>
+
+</div>
+
+<div id="mainApp" style="display:none;">
+
+<body>
+
+<div class="wrapper">
+
+    <div class="hero">
+
+        <div class="logo">
+            👑
+        </div>
+
+        <div class="title">
+            ELEVATE TRADING
+        </div>
+
+        <div class="subtitle">
+            ROYAL SIGNAL SYSTEM 2026
+        </div>
+
+    </div>
+    
+<div class="panel">
+
+    <h2>Trading Control</h2>
+
+    <div class="field">
+
+        <label>Broker</label>
+
+        <select id="broker">
+            <option>Quotex</option>
+            <option>Binomo</option>
+            <option>Pocket Option</option>
+        </select>
+
+    </div>
+
+    <div class="field">
+
+        <label>Market</label>
+
+        <select id="market">
+
+<option>AUDCAD</option>
+<option>AUDCHF</option>
+<option>AUDJPY</option>
+<option>AUDUSD</option>
+
+<option>CADCHF</option>
+<option>CADJPY</option>
+
+<option>CHFJPY</option>
+
+<option>EURAUD</option>
+<option>EURCAD</option>
+<option>EURCHF</option>
+<option>EURGBP</option>
+<option>EURJPY</option>
+<option>EURUSD</option>
+
+<option>GBPAUD</option>
+<option>GBPCAD</option>
+<option>GBPCHF</option>
+<option>GBPJPY</option>
+<option>GBPUSD</option>
+
+<option>USDCAD</option>
+<option>USDCHF</option>
+<option>USDJPY</option>
+</select>
+
+    </div>
+
+    <div class="field">
+
+        <label>Timeframe</label>
+
+        <select id="timeframe">
+            <option value="1">1 Minute</option>
+            <option value="2">2 Minute</option>
+            <option value="5">5 Minute</option>
+            <option value="15">15 Minute</option>
+        </select>
+
+    </div>
+
+    <div id="clock" class="clock">
+        00:00:00
+    </div>
+    
+    <button id="generateBtn" class="generate-btn">
+    GENERATE SIGNAL
+</button>
+
+</div>
+
+<div class="signal-card">
+
+    <div class="signal-title">
+        CURRENT SIGNAL
+    </div>
+
+    <div id="signalBox" class="signal-box">
+        WAIT
+    </div>
+
+    <div id="signalInfo" class="signal-info">
+
+        Market : --<br>
+        Timeframe : --<br>
+        Status : Waiting
+
+    </div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+const savedHash =
+"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b";
+
+const API_KEY =
+"e4d1a31ba8224449a266f6e6852bd491";
+
+document
+.getElementById("unlockBtn")
+.addEventListener("click", checkPassword);
+
+function updateClock(){
+
+    const now = new Date();
+
+    document.getElementById("clock").innerHTML =
+    now.toLocaleTimeString();
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+const btn =
+document.getElementById("generateBtn");
+
+const signalBox =
+document.getElementById("signalBox");
+
+const signalInfo =
+document.getElementById("signalInfo");
+
+let signalRunning = false;
+
+btn.addEventListener("click",()=>{
+
+    if(signalRunning) return;
+
+    signalRunning = true;
+
+    btn.disabled = true;
+
+    btn.innerHTML = "ANALYZING...";
+
+    signalBox.className =
+    "signal-box";
+
+    signalBox.innerHTML =
+    "SCAN";
+
+    setTimeout(()=>{
+
+        generateSignal();
+
+    },2000);
+
+});
+
+async function sha256(text) {
+    const data = new TextEncoder().encode(text);
+    const hashBuffer = await crypto.subtle.digest("SHA-256", data);
+
+    return Array.from(new Uint8Array(hashBuffer))
+        .map(b => b.toString(16).padStart(2, "0"))
+        .join("");
+}
+
+async function checkPassword() {
+
+    const entered =
+    document.getElementById("passwordInput").value;
+
+    const enteredHash =
+    await sha256(entered);
+
+    if (enteredHash === savedHash) {
+
+        document.getElementById("lockScreen").style.display = "none";
+        document.getElementById("mainApp").style.display = "block";
+
+    } else {
+
+        document.getElementById("errorMsg").innerHTML =
+        "Wrong Password";
+
+    }
+}
+async function generateSignal(){
+
+    const market =
+document.getElementById("market").value;
+
+const symbolMap = {
+"AUDCAD":"AUD/CAD",
+"AUDCHF":"AUD/CHF",
+"AUDJPY":"AUD/JPY",
+"AUDUSD":"AUD/USD",
+
+"CADCHF":"CAD/CHF",
+"CADJPY":"CAD/JPY",
+
+"CHFJPY":"CHF/JPY",
+
+"EURAUD":"EUR/AUD",
+"EURCAD":"EUR/CAD",
+"EURCHF":"EUR/CHF",
+"EURGBP":"EUR/GBP",
+"EURJPY":"EUR/JPY",
+"EURUSD":"EUR/USD",
+
+"GBPAUD":"GBP/AUD",
+"GBPCAD":"GBP/CAD",
+"GBPCHF":"GBP/CHF",
+"GBPJPY":"GBP/JPY",
+"GBPUSD":"GBP/USD",
+
+"USDCAD":"USD/CAD",
+"USDCHF":"USD/CHF",
+"USDJPY":"USD/JPY"};
+
+const symbol = symbolMap[market];
+
+    const url =
+    `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1min&outputsize=100&apikey=${API_KEY}`;
+
+    try{
+
+    const response =
+    await fetch(url);
+
+    const data =
+    await response.json();
+
+    if(!data.values){
+
+        signalBox.innerHTML =
+        "NO DATA";
+
+        btn.disabled = false;
+        btn.innerHTML =
+        "GENERATE SIGNAL";
+
+        signalRunning = false;
+
+        return;
+    }
+
+    const candles =
+    data.values.reverse();
+
+    analyzeMarket(candles);
+
+}
+catch(err){
+
+    signalBox.innerHTML =
+    "ERROR";
+
+    btn.disabled = false;
+
+    btn.innerHTML =
+    "GENERATE SIGNAL";
+
+    signalRunning = false;
+
+    console.log(err);
+}
+}
+
+function calculateEMA(prices, period){
+
+    const k =
+    2/(period+1);
+
+    let ema =
+    prices[0];
+
+    for(let i=1;i<prices.length;i++){
+
+        ema =
+        prices[i]*k +
+        ema*(1-k);
+
+    }
+
+    return ema;
+}
+
+function calculateRSI(prices, period=14){
+
+    let gains = 0;
+    let losses = 0;
+
+    for(let i=1;i<=period;i++){
+
+        const diff =
+        prices[i]-prices[i-1];
+
+        if(diff>0)
+            gains+=diff;
+        else
+            losses-=diff;
+    }
+
+    const rs =
+    gains/(losses||1);
+
+    return 100-
+    (100/(1+rs));
+}
+
+// =============================
+// SIGNAL HISTORY
+// =============================
+
+function saveSignal(signal){
+
+    let history = JSON.parse(localStorage.getItem("signalHistory")) || [];
+
+    history.unshift(signal);
+
+    if(history.length > 100){
+        history = history.slice(0,100);
+    }
+
+    localStorage.setItem(
+        "signalHistory",
+        JSON.stringify(history)
+    );
+
+}
+
+function updateSignalResult(id,result){
+
+    let history = JSON.parse(localStorage.getItem("signalHistory")) || [];
+
+    const index = history.findIndex(x=>x.id===id);
+
+    if(index!==-1){
+
+        history[index].result=result;
+
+        localStorage.setItem(
+            "signalHistory",
+            JSON.stringify(history)
+        );
+
+    }
+
+}
+
+function analyzeMarket(candles){
+
+    const closes =
+    candles.map(
+    c => parseFloat(c.close)
+    );
+
+    const ema9 =
+    calculateEMA(closes,9);
+
+    const ema21 =
+    calculateEMA(closes,21);
+
+    const ema50 =
+    calculateEMA(closes,50);
+
+    const rsi =
+    calculateRSI(
+    closes.slice(-15)
+    );
+
+    const last =
+    closes[closes.length-1];
+    
+    const currentPrice =
+    last;
+
+    /* MANDATORY OVERBOUGHT OVERSOLD FILTER */
+
+if(rsi >= 80){
+
+    displaySignal(
+        "NO SIGNAL",
+        0,
+        ema9,
+        ema21,
+        ema50,
+        rsi,
+        "OVERBOUGHT",
+        currentPrice
+    );
+
+    btn.disabled = false;
+    btn.innerHTML = "GENERATE SIGNAL";
+    signalRunning = false;
+
+    return;
+}
+
+if(rsi <= 20){
+
+    displaySignal(
+        "NO SIGNAL",
+        0,
+        ema9,
+        ema21,
+        ema50,
+        rsi,
+        "OVERSOLD",
+        currentPrice
+    );
+
+    btn.disabled = false;
+    btn.innerHTML = "GENERATE SIGNAL";
+    signalRunning = false;
+
+    return;
+}
+
+    const prev =
+    closes[closes.length-2];
+
+    let callScore = 0;
+    let putScore = 0;
+    
+    const lastCandle =
+candles[candles.length-1];
+
+const prevCandle =
+candles[candles.length-2];
+
+    /* TREND */
+
+    if(ema9 > ema21)
+        callScore += 30;
+
+    if(ema21 > ema50)
+        callScore += 25;
+
+    if(ema9 < ema21)
+        putScore += 30;
+
+    if(ema21 < ema50)
+        putScore += 25;
+
+    /* RSI */
+
+    if(rsi > 55 && rsi < 75)
+        callScore += 25;
+
+    if(rsi < 45 && rsi > 25)
+        putScore += 25;
+
+    /* MOMENTUM */
+
+    if(last > prev)
+        callScore += 20;
+
+    if(last < prev)
+        putScore += 20;
+        
+    /* ENGULFING */
+
+const bullishEngulf =
+parseFloat(lastCandle.close) >
+parseFloat(prevCandle.open) &&
+parseFloat(lastCandle.open) <
+parseFloat(prevCandle.close);
+
+const bearishEngulf =
+parseFloat(lastCandle.close) <
+parseFloat(prevCandle.open) &&
+parseFloat(lastCandle.open) >
+parseFloat(prevCandle.close);
+
+if(bullishEngulf)
+    callScore += 25;
+
+if(bearishEngulf)
+    putScore += 25;
+    
+    /* TREND STRENGTH */
+
+const trendStrength =
+Math.abs(ema9 - ema50);
+
+if(trendStrength > 0.00030){
+
+    if(ema9 > ema50)
+        callScore += 20;
+
+    if(ema9 < ema50)
+        putScore += 20;
+
+}
+    /* STRONG BREAK */
+
+    if(
+       last > prev &&
+       ema9 > ema21
+    )
+        callScore += 10;
+
+    if(
+       last < prev &&
+       ema9 < ema21
+    )
+        putScore += 10;
+        
+    /* REJECTION WICK */
+
+const high =
+parseFloat(lastCandle.high);
+
+const low =
+parseFloat(lastCandle.low);
+
+const open =
+parseFloat(lastCandle.open);
+
+const close =
+parseFloat(lastCandle.close);
+
+const upperWick =
+high - Math.max(open,close);
+
+const lowerWick =
+Math.min(open,close) - low;
+
+if(
+    lowerWick >
+    Math.abs(close-open)*1.5
+){
+    callScore += 20;
+}
+
+if(
+    upperWick >
+    Math.abs(close-open)*1.5
+){
+    putScore += 20;
+}
+
+/* ATR VOLATILITY FILTER */
+
+let atr = 0;
+
+for(let i=1;i<15;i++){
+
+    atr += Math.abs(
+    closes[closes.length-i] -
+    closes[closes.length-i-1]
+    );
+
+}
+
+atr /= 14;
+
+if(atr < 0.00008){
+
+    displaySignal(
+        "NO SIGNAL",
+        0,
+        ema9,
+        ema21,
+        ema50,
+        rsi,
+        "LOW VOLATILITY",
+        currentPrice
+    );
+
+btn.disabled = false;
+btn.innerHTML = "GENERATE SIGNAL";
+signalRunning = false;
+
+    return;
+}
+
+    /* RANGE FILTER */
+
+    if(
+       Math.abs(ema9 - ema21)
+       <
+       0.00005
+    ){
+
+        displaySignal(
+    "NO SIGNAL",
+    0,
+    ema9,
+    ema21,
+    ema50,
+    rsi,
+    "RANGING",
+    currentPrice
+);
+btn.disabled = false;
+btn.innerHTML = "GENERATE SIGNAL";
+signalRunning = false;
+
+        return;
+    }
+
+    let signal =
+    "NO SIGNAL";
+
+    let strength =
+    0;
+
+    let trend =
+    "SIDEWAYS";
+btn.disabled = false;
+btn.innerHTML = "GENERATE SIGNAL";
+signalRunning = false;
+    if(callScore >= 120){
+
+        signal =
+        "CALL";
+
+        strength =
+        callScore;
+
+        trend =
+        "BULLISH";
+
+    }
+    else if(putScore >= 120){
+
+        signal =
+        "PUT";
+
+        strength =
+        putScore;
+
+        trend =
+        "BEARISH";
+
+    }
+
+    displaySignal(
+        signal,
+        strength,
+        ema9,
+        ema21,
+        ema50,
+        rsi,
+        trend,
+        currentPrice
+    );
+
+    const tf =
+    parseInt(
+    document.getElementById(
+    "timeframe"
+    ).value
+    );
+
+    <!-- startCooldown(tf); -->
+
+}
+
+function displaySignal(
+signal,
+score,
+ema9,
+ema21,
+ema50,
+rsi,
+trend,
+currentPrice
+){
+
+    const market =
+    document.getElementById("market").value;
+
+    const now = new Date();
+
+const entryTime =
+new Date(now.getTime() + 60000);
+
+const entry =
+entryTime.toLocaleTimeString();
+    
+    signalBox.className =
+    "signal-box";
+
+    if(signal==="CALL")
+        signalBox.classList.add(
+        "call"
+        );
+
+    if(signal==="PUT")
+        signalBox.classList.add(
+        "put"
+        );
+
+    signalBox.innerHTML =
+    signal;
+
+signalInfo.innerHTML =
+`
+Market : ${market}<br>
+Trend : ${trend}<br>
+Current Price : ${currentPrice.toFixed(5)}<br>
+Strength : ${score}%<br>
+Entry Time : ${entry}<br>`;
+
+// ===== Save Signal =====
+
+if(signal === "CALL" || signal === "PUT"){
+
+    const id = Date.now().toString();
+
+    const tf = parseInt(document.getElementById("timeframe").value);
+
+    const now = new Date();
+
+    const entry = new Date(now);
+    entry.setMinutes(entry.getMinutes()+1);
+    entry.setSeconds(0);
+
+    const expiry = new Date(entry);
+    expiry.setMinutes(expiry.getMinutes()+tf);
+
+    saveSignal({
+
+        id:id,
+
+        time:now.toLocaleString(),
+
+        pair:market,
+
+        signal:signal,
+
+        confidence:score,
+
+        entry:entry.toLocaleTimeString(),
+
+        expiry:expiry.toLocaleTimeString(),
+
+        result:"Pending"
+
+    });
+
+    checkTradeResult(
+        id,
+        signal,
+        market,
+        expiry
+    );
+
+}
+}
+
+function startCooldown(minutes){
+
+    let seconds =
+    minutes * 60;
+
+    const timer =
+    setInterval(()=>{
+
+        seconds--;
+
+        btn.innerHTML =
+        `WAIT ${seconds}s`;
+
+        if(seconds <= 0){
+
+            clearInterval(timer);
+
+            btn.disabled = false;
+
+            btn.innerHTML =
+            "GENERATE SIGNAL";
+
+            signalRunning = false;
+
+            signalBox.className =
+            "signal-box";
+
+            signalBox.innerHTML =
+            "WAIT";
+
+            signalInfo.innerHTML =
+            `
+            Market : --<br>
+            Timeframe : --<br>
+            Status : Ready
+            `;
+
+        }
+
+    },1000);
+
+}
+
+async function checkTradeResult(
+id,
+signal,
+market,
+expiryTime
+){
+
+    const wait = expiryTime.getTime()-Date.now();
+
+    if(wait<=0)return;
+
+    setTimeout(async()=>{
+
+        try{
+
+            const symbolMap={
+
+"AUDCAD":"AUD/CAD",
+"AUDCHF":"AUD/CHF",
+"AUDJPY":"AUD/JPY",
+"AUDUSD":"AUD/USD",
+"CADCHF":"CAD/CHF",
+"CADJPY":"CAD/JPY",
+"CHFJPY":"CHF/JPY",
+"EURAUD":"EUR/AUD",
+"EURCAD":"EUR/CAD",
+"EURCHF":"EUR/CHF",
+"EURGBP":"EUR/GBP",
+"EURJPY":"EUR/JPY",
+"EURUSD":"EUR/USD",
+"GBPAUD":"GBP/AUD",
+"GBPCAD":"GBP/CAD",
+"GBPCHF":"GBP/CHF",
+"GBPJPY":"GBP/JPY",
+"GBPUSD":"GBP/USD",
+"USDCAD":"USD/CAD",
+"USDCHF":"USD/CHF",
+"USDJPY":"USD/JPY"
+
+            };
+
+            const url=`https://api.twelvedata.com/time_series?symbol=${symbolMap[market]}&interval=1min&outputsize=2&apikey=${API_KEY}`;
+
+            const res=await fetch(url);
+
+            const data=await res.json();
+
+            if(!data.values)return;
+
+            const candles=data.values.reverse();
+
+            const entryPrice=parseFloat(candles[0].close);
+
+            const closePrice=parseFloat(candles[1].close);
+
+            let result="DRAW";
+
+            if(signal==="CALL"){
+
+                result=closePrice>entryPrice?"WIN":"LOSS";
+
+            }else{
+
+                result=closePrice<entryPrice?"WIN":"LOSS";
+
+            }
+
+            updateSignalResult(id,result);
+
+        }catch(e){
+
+            console.log(e);
+
+        }
+
+    },wait);
+
+}
+
+</script>
+
+</body>
+</html>
