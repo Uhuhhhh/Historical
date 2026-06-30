@@ -822,6 +822,25 @@ ${item.signal}
 <span>${item.expiry}</span>
 
 </div>
+<div class="infoRow">
+
+<span>Result</span>
+
+<span style="
+font-weight:bold;
+color:${
+item.result=="WIN" ? "#00ff88" :
+item.result=="LOSS" ? "#ff4444" :
+"#FFD700"
+};
+">
+
+${item.result || "Pending"}
+
+</span>
+
+</div>
+
 
 <div class="infoRow">
 
