@@ -2070,7 +2070,6 @@ Candle       ${historicalDirection=="CALL" ? "🟢 Strong Bullish" : "🔴 Stron
 `;
 saveSignal({
 
-
 pair:market,
 
 signal:historicalDirection,
@@ -2083,18 +2082,23 @@ expiry:tradeTime.expiry,
 
 result:"PENDING",
 
-entryPrice:currentPrice
+entryPrice:closes[closes.length-1]
 
 });
+
 setTimeout(() => {
 
-    updateSignalResult(
-        market,
-        historicalDirection,
-        currentPrice
-    );
+updateSignalResult(
 
-}, parseInt(document.getElementById("timeframe").value) * 60000);
+market,
+
+historicalDirection,
+
+closes[closes.length-1]
+
+);
+
+}, parseInt(document.getElementById("timeframe").value)*60000);
 
 btn.disabled=false;
 btn.innerHTML="GENERATE SIGNAL";
