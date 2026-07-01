@@ -437,6 +437,1031 @@ body{
         <label>Market</label>
 
         <select id="market">
+            <option>AUDCAD</option>
+<option>AUDCHF</option>
+<option>AUDJPY</option>
+<option>AUDUSD</option>
+
+<option>CADCHF</option>
+<option>CADJPY</option>
+
+<option>CHFJPY</option>
+
+<option>EURAUD</option>
+<option>EURCAD</option>
+<option>EURCHF</option>
+<option>EURGBP</option>
+<option>EURJPY</option>
+<option>EURUSD</option>
+
+<option>GBPAUD</option>
+<option>GBPCAD</option>
+<option>GBPCHF</option>
+<option>GBPJPY</option>
+<option>GBPUSD</option>
+
+<option>USDCAD</option>
+<option>USDCHF</option>
+<option>USDJPY</option>
+        </select>
+
+    </div>
+
+    <div class="field">
+
+        <label>Timeframe</label>
+
+        <select id="timeframe">
+            <option value="1">1 Minute</option>
+            <option value="2">2 Minute</option>
+            <option value="5">5 Minute</option>
+            <option value="15">15 Minute</option>
+        </select>
+
+    </div>
+
+    <div id="clock" class="clock">
+        00:00:00
+    </div>
+    
+    <button id="generateBtn" class="generate-btn">
+    GENERATE SIGNAL
+</button>
+
+</div>
+
+<div class="signal-card">
+
+    <div class="signal-title">
+        CURRENT SIGNAL
+    </div>
+
+    <div id="signalBox" class="signal-box">
+        WAIT
+    </div>
+
+    <div id="signalInfo" class="signal-info">
+
+        Market : --<br>
+        Timeframe : --<br>
+        Status : Waiting
+
+    </div>
+
+</div>
+
+</div>
+</div>
+
+<script>
+
+const PASSWORD =
+"1";
+
+const API_KEY =
+"e4d1a31ba8224449a266f6e6852bd491";
+
+document
+.getElementById("unlockBtn")
+.addEventListener("click",()=>{
+
+    const entered =
+    document.getElementById(
+    "passwordInput"
+    ).value;
+
+    if(entered === PASSWORD){
+
+        document.getElementById(
+        "lockScreen"
+        ).style.display =
+        "none";
+
+        document.getElementById(
+        "mainApp"
+        ).style.display =
+        "block";
+
+    }
+    else{
+
+        document.getElementById(
+        "errorMsg"
+        ).innerHTML =
+        "Wrong Password";
+
+    }
+
+});
+
+function updateClock(){
+
+    const now = new Date();
+
+    document.getElementById("clock").innerHTML =
+    now.toLocaleTimeString();
+
+}
+
+setInterval(updateClock,1000);
+
+updateClock();
+const btn =
+document.getElementById("generateBtn");
+
+const signalBox =
+document.getElementById("signalBox");
+
+const signalInfo =
+document.getElementById("signalInfo");
+
+let signalRunning = false;
+
+btn.addEventListener("click",()=>{
+
+    if(signalRunning) return;
+
+    signalRunning = true;
+
+    btn.disabled = true;
+
+    btn.innerHTML = "ANALYZING...";
+
+    signalBox.className =
+    "signal-box";
+
+    signalBox.innerHTML =
+    "SCAN";
+
+    setTimeout(()=>{
+
+        generateSignal();
+
+    },2000);
+
+});
+
+async function generateSignal(){
+
+    const market =
+document.getElementById("market").value;
+
+const symbolMap = {
+   "AUDCAD":"AUD/CAD",
+"AUDCHF":"AUD/CHF",
+"AUDJPY":"AUD/JPY",
+"AUDUSD":"AUD/USD",
+
+"CADCHF":"CAD/CHF",
+"CADJPY":"CAD/JPY",
+
+"CHFJPY":"CHF/JPY",
+
+"EURAUD":"EUR/AUD",
+"EURCAD":"EUR/CAD",
+"EURCHF":"EUR/CHF",
+"EURGBP":"EUR/GBP",
+"EURJPY":"EUR/JPY",
+"EURUSD":"EUR/USD",
+
+"GBPAUD":"GBP/AUD",
+"GBPCAD":"GBP/CAD",
+"GBPCHF":"GBP/CHF",
+"GBPJPY":"GBP/JPY",
+"GBPUSD":"GBP/USD",
+
+"USDCAD":"USD/CAD",
+"USDCHF":"USD/CHF",
+"USDJPY":"USD/JPY"};
+
+const symbol = symbolMap[market];
+
+    const url =
+    `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1min&outputsize=500&apikey=${API_KEY}`;
+
+    try{
+
+    const response =
+    await fetch(url);
+
+    const data =
+    await response.json();
+
+    if(!data.values){
+
+        signalBox.innerHTML =
+        "NO DATA";
+
+        btn.disabled = false;
+        btn.innerHTML =
+        "GENERATE SIGNAL";
+
+        signalRunning = false;
+
+        return;
+    }
+
+    const candles =
+    data.values.reverse();
+
+    analyzeMarket(candles);
+
+}
+catch(err){
+
+    signalBox.innerHTML =
+    "ERROR";
+
+    btn.disabled = false;
+
+    btn.innerHTML =
+    "GENERATE SIGNAL";
+
+    signalRunning = false;
+
+    console.log(err);
+}
+}
+
+// ===============================
+// ELEVATE AI V3 - INDICATOR ENGINE
+// PART 1
+// ===============================
+
+// EMA
+function calculateEMA(prices, period){
+
+    const k = 2 / (period + 1);
+
+    let ema = prices[0];
+
+    for(let i = 1; i < prices.length; i++){
+
+        ema = prices[i] * k + ema * (1 - k);
+
+    }
+
+    return ema;
+
+}
+
+// RSI
+function calculateRSI(prices, period = 14){
+
+    let gain = 0;
+    let loss = 0;
+
+    for(let i = prices.length - period; i < prices.length; i++){
+
+        const diff = prices[i] - prices[i-1];
+
+        if(diff > 0){
+
+            gain += diff;
+
+        }else{
+
+            loss += Math.abs(diff);
+
+        }
+
+    }
+
+    if(loss === 0) return 100;
+
+    const rs = gain / loss;
+
+    return 100 - (100 / (1 + rs));
+
+}
+
+// ATR
+function calculateATR(candles, period = 14){
+
+    let tr = [];
+
+    for(let i = 1; i < candles.length; i++){
+
+        const high = parseFloat(candles[i].high);
+        const low = parseFloat(candles[i].low);
+        const prevClose = parseFloat(candles[i-1].close);
+
+        tr.push(
+
+            Math.max(
+
+                high - low,
+
+                Math.abs(high - prevClose),
+
+                Math.abs(low - prevClose)
+
+            )
+
+        );
+
+    }
+
+    let atr = 0;
+
+    for(let i = tr.length-period; i < tr.length; i++){
+
+        atr += tr[i];
+
+    }
+
+    return atr / period;
+
+}
+
+// Trend
+function detectTrend(ema20, ema50, ema200){
+
+    if(
+
+        ema20 > ema50 &&
+        ema50 > ema200
+
+    ){
+
+        return "STRONG UP";
+
+    }
+
+    if(
+
+        ema20 < ema50 &&
+        ema50 < ema200
+
+    ){
+
+        return "STRONG DOWN";
+
+    }
+
+    if(ema20 > ema50){
+
+        return "UP";
+
+    }
+
+    if(ema20 < ema50){
+
+        return "DOWN";
+
+    }
+
+    return "SIDEWAYS";
+
+}
+
+// ATR Quality
+function getATRQuality(atr){
+
+    if(atr < 0.00030){
+
+        return "LOW";
+
+    }
+
+    if(atr < 0.00120){
+
+        return "GOOD";
+
+    }
+
+    return "HIGH";
+
+}
+
+// Entry & Expiry
+function getTradeTime(tf){
+
+    const now = new Date();
+
+    const entry = new Date(now);
+
+    entry.setMinutes(entry.getMinutes()+1);
+
+    entry.setSeconds(0);
+
+    const expiry = new Date(entry);
+
+    expiry.setMinutes(expiry.getMinutes()+tf);
+
+    function f(v){
+
+        return String(v).padStart(2,"0");
+
+    }
+
+    return{
+
+        current:
+        `${f(now.getHours())}:${f(now.getMinutes())}`,
+
+        entry:
+        `${f(entry.getHours())}:${f(entry.getMinutes())}`,
+
+        expiry:
+        `${f(expiry.getHours())}:${f(expiry.getMinutes())}`
+
+    };
+
+}
+
+// ===============================
+// SAVE SIGNAL HISTORY
+// ===============================
+
+function saveSignal(signal){
+
+let history =
+JSON.parse(
+localStorage.getItem("signalHistory")
+) || [];
+
+history.unshift(signal);
+
+if(history.length > 100){
+
+history = history.slice(0,100);
+
+}
+
+localStorage.setItem(
+"signalHistory",
+JSON.stringify(history)
+);
+
+}
+
+function analyzeMarket(candles){
+
+    const closes = candles.map(c=>parseFloat(c.close));
+    const opens  = candles.map(c=>parseFloat(c.open));
+
+    // ===== PART 1 =====
+    const ema20 = calculateEMA(closes,20);
+    const ema50 = calculateEMA(closes,50);
+    const ema200 = calculateEMA(closes,200);
+
+    const rsi = calculateRSI(closes);
+
+    const atr = calculateATR(candles);
+
+    const trend = detectTrend(
+        ema20,
+        ema50,
+        ema200
+    );
+
+    const atrStatus = getATRQuality(atr);
+
+    const tradeTime = getTradeTime(
+        parseInt(
+            document.getElementById("timeframe").value
+        )
+    );
+    // ==================
+
+    const PATTERN_SIZE = 5;
+    const EXPIRY = parseInt(
+        document.getElementById("timeframe").value
+    );
+
+    if(closes.length < 100){
+        signalBox.innerHTML = "NO DATA";
+        return;
+    }
+
+    let currentPattern = [];
+
+    for(let i=closes.length-PATTERN_SIZE;i<closes.length;i++){
+
+        currentPattern.push(
+            closes[i] > opens[i] ? 1 : 0
+        );
+
+    }
+
+    let callWins = 0;
+    let putWins = 0;
+    let matches = 0;
+
+    for(let i=PATTERN_SIZE;i<closes.length-EXPIRY-1;i++){
+
+        let historicalPattern = [];
+
+        for(let j=i-PATTERN_SIZE;j<i;j++){
+
+            historicalPattern.push(
+                closes[j] > opens[j] ? 1 : 0
+            );
+
+        }
+
+        let same = true;
+
+        for(let k=0;k<PATTERN_SIZE;k++){
+
+            if(
+                historicalPattern[k] !==
+                currentPattern[k]
+            ){
+                same = false;
+                break;
+            }
+
+        }
+
+        if(!same) continue;
+
+        matches++;
+
+        const entryPrice =
+        closes[i];
+
+        const expiryPrice =
+        closes[i+EXPIRY];
+
+        if(expiryPrice > entryPrice)
+            callWins++;
+
+        if(expiryPrice < entryPrice)
+            putWins++;
+
+    }
+
+    if(matches < 5){
+
+        signalBox.className = "signal-box";
+        signalBox.innerHTML = "NO SIGNAL";
+
+        signalInfo.innerHTML =
+        `
+        Historical Matches : ${matches}<br>
+        Not enough data
+        `;
+
+        btn.disabled = false;
+        btn.innerHTML = "GENERATE SIGNAL";
+        signalRunning = false;
+
+        return;
+    }
+
+    const callRate =
+    ((callWins/matches)*100);
+
+    const putRate =
+    ((putWins/matches)*100);
+
+    let signal = "NO SIGNAL";
+    let confidence = 0;
+
+    if(callRate > putRate){
+
+        signal = "CALL";
+        confidence = callRate;
+
+    }else{
+
+        signal = "PUT";
+        confidence = putRate;
+
+    }
+
+    signalBox.className = "signal-box";
+
+    if(signal==="CALL")
+        signalBox.classList.add("call");
+
+    if(signal==="PUT")
+        signalBox.classList.add("put");
+
+    signalBox.innerHTML = signal;
+
+    signalInfo.innerHTML =
+    `
+    Historical Matches : ${matches}<br>
+    CALL Wins : ${callWins}<br>
+    PUT Wins : ${putWins}<br>
+    Confidence : ${confidence.toFixed(1)}%<br>
+    Expiry : ${EXPIRY} Candle
+    `;
+    
+    saveSignal({
+
+pair:market,
+
+signal:historicalDirection,
+
+confidence:historicalScore,
+
+entry:tradeTime.entry,
+
+expiry:tradeTime.expiry,
+
+result:"PENDING",
+
+entryPrice:closes[closes.length-1]
+
+});
+
+setTimeout(() => {
+
+updateSignalResult(
+
+market,
+
+historicalDirection,
+
+closes[closes.length-1]
+
+);
+
+}, parseInt(document.getElementById("timeframe").value)*60000);
+
+    btn.disabled = false;
+    btn.innerHTML = "GENERATE SIGNAL";
+    signalRunning = false;
+}
+
+function displaySignal(
+signal,
+score,
+ema9,
+ema21,
+ema50,
+rsi,
+trend,
+currentPrice
+){
+
+    const market =
+    document.getElementById("market").value;
+    
+    signalBox.className =
+    "signal-box";
+
+    if(signal==="CALL")
+        signalBox.classList.add(
+        "call"
+        );
+
+    if(signal==="PUT")
+        signalBox.classList.add(
+        "put"
+        );
+
+    signalBox.innerHTML =
+    signal;
+
+    signalInfo.innerHTML =
+    `
+    Market : ${market}<br>
+    Trend : ${trend}<br>
+    Current Price : ${currentPrice.toFixed(5)}<br>
+    Strength : ${score}%<br>
+    RSI : ${rsi.toFixed(1)}<br>
+    EMA9 : ${ema9.toFixed(5)}<br>
+    EMA21 : ${ema21.toFixed(5)}<br>
+    EMA50 : ${ema50.toFixed(5)}
+    `;
+}
+
+async function updateSignalResult(pair, signal, entryPrice){
+
+try{
+
+const symbolMap={
+"AUDCAD":"AUD/CAD",
+"AUDCHF":"AUD/CHF",
+"AUDJPY":"AUD/JPY",
+"AUDUSD":"AUD/USD",
+"CADCHF":"CAD/CHF",
+"CADJPY":"CAD/JPY",
+"CHFJPY":"CHF/JPY",
+"EURAUD":"EUR/AUD",
+"EURCAD":"EUR/CAD",
+"EURCHF":"EUR/CHF",
+"EURGBP":"EUR/GBP",
+"EURJPY":"EUR/JPY",
+"EURUSD":"EUR/USD",
+"GBPAUD":"GBP/AUD",
+"GBPCAD":"GBP/CAD",
+"GBPCHF":"GBP/CHF",
+"GBPJPY":"GBP/JPY",
+"GBPUSD":"GBP/USD",
+"USDCAD":"USD/CAD",
+"USDCHF":"USD/CHF",
+"USDJPY":"USD/JPY"
+};
+
+const symbol=symbolMap[pair];
+
+if(!symbol) return;
+
+const response=await fetch(
+`https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1min&outputsize=2&apikey=${API_KEY}`
+);
+
+const data=await response.json();
+
+if(!data || !data.values || data.values.length===0) return;
+
+const close=parseFloat(data.values[0].close);
+
+let history=JSON.parse(localStorage.getItem("signalHistory"))||[];
+
+const index=history.findIndex(x=>x.result==="PENDING" && x.pair===pair);
+
+if(index===-1) return;
+
+history[index].result=
+signal==="CALL"
+? (close>entryPrice?"WIN":"LOSS")
+: (close<entryPrice?"WIN":"LOSS");
+
+localStorage.setItem("signalHistory",JSON.stringify(history));
+
+}catch(err){
+
+console.error("Result Update Error:",err);
+
+}
+}
+
+function startCooldown(minutes){
+
+    let seconds =
+    minutes * 60;
+
+    const timer =
+    setInterval(()=>{
+
+        seconds--;
+
+        btn.innerHTML =
+        `WAIT ${seconds}s`;
+
+        if(seconds <= 0){
+
+            clearInterval(timer);
+
+            btn.disabled = false;
+
+            btn.innerHTML =
+            "GENERATE SIGNAL";
+
+            signalRunning = false;
+
+            signalBox.className =
+            "signal-box";
+
+            signalBox.innerHTML =
+            "WAIT";
+
+            signalInfo.innerHTML =
+            `
+            Market : --<br>
+            Timeframe : --<br>
+            Status : Ready
+            `;
+
+        }
+
+    },1000);
+
+}
+
+</script>
+
+</body>
+</html>    border:none;
+
+    border-radius:18px;
+
+    background:
+    linear-gradient(
+    135deg,
+    #FFD700,
+    #FFF2A8
+    );
+
+    color:#000;
+
+    font-size:18px;
+
+    font-weight:900;
+
+    cursor:pointer;
+
+    box-shadow:
+    0 0 20px rgba(255,215,0,.3);
+}
+
+.signal-card{
+
+    margin-top:20px;
+
+    background:rgba(255,255,255,.03);
+
+    border:1px solid rgba(255,215,0,.15);
+
+    border-radius:30px;
+
+    padding:20px;
+
+    text-align:center;
+}
+
+.signal-title{
+
+    color:gold;
+
+    font-size:16px;
+
+    font-weight:700;
+
+    margin-bottom:15px;
+}
+
+.signal-box{
+
+    height:110px;
+
+    border-radius:20px;
+
+    display:flex;
+
+    align-items:center;
+
+    justify-content:center;
+
+    font-size:42px;
+
+    font-weight:900;
+
+    background:#111;
+}
+
+.call{
+
+    background:
+    linear-gradient(
+    135deg,
+    #00ff88,
+    #00bb66
+    );
+
+    color:#fff;
+}
+
+.put{
+
+    background:
+    linear-gradient(
+    135deg,
+    #ff4444,
+    #bb2222
+    );
+
+    color:#fff;
+}
+
+.signal-info{
+
+    margin-top:15px;
+
+    color:#ccc;
+
+    line-height:28px;
+}
+
+.field{
+
+    margin-bottom:15px;
+}
+
+.field label{
+
+    display:block;
+
+    margin-bottom:8px;
+
+    color:#ccc;
+}
+
+.field select{
+
+    width:100%;
+
+    height:55px;
+
+    border:none;
+
+    outline:none;
+
+    background:#111;
+
+    color:white;
+
+    border-radius:15px;
+
+    padding:0 15px;
+}
+
+.clock{
+
+    margin-top:15px;
+
+    text-align:center;
+
+    font-size:24px;
+
+    font-weight:800;
+
+    color:gold;
+
+    background:#111;
+
+    padding:15px;
+
+    border-radius:15px;
+}
+
+</style>
+
+</head>
+
+<div id="lockScreen">
+
+    <div class="lockBox">
+
+        <h1>🔐 Elevate Trading</h1>
+
+        <p>Enter Password</p>
+
+        <input
+        type="password"
+        id="passwordInput"
+        placeholder="Password">
+
+        <button id="unlockBtn">
+            UNLOCK
+        </button>
+
+        <div id="errorMsg"></div>
+
+    </div>
+
+</div>
+
+<div id="mainApp" style="display:none;">
+
+<body>
+
+<div class="wrapper">
+
+    <div class="hero">
+
+        <div class="logo">
+            👑
+        </div>
+
+        <div class="title">
+            ELEVATE TRADING
+        </div>
+
+        <div class="subtitle">
+            ROYAL SIGNAL SYSTEM 2026
+        </div>
+
+    </div>
+    
+<div class="panel">
+
+    <h2>Trading Control</h2>
+
+    <div class="field">
+
+        <label>Broker</label>
+
+        <select id="broker">
+            <option>Quotex</option>
+            <option>Binomo</option>
+            <option>Pocket Option</option>
+        </select>
+
+    </div>
+
+    <div class="field">
+
+        <label>Market</label>
+
+        <select id="market">
             <option>EURUSD</option>
             <option>GBPUSD</option>
             <option>GBPCAD</option>
