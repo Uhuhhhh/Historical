@@ -1053,21 +1053,19 @@ function analyzeMarket(candles){
     
     saveSignal({
 
-pair: String(market),
+pair:market,
 
-signal: String(signal),
+signal:historicalDirection,
 
-confidence: Number(confidence.toFixed(1)),
+confidence:historicalScore,
 
-entry: tradeTime.entry,
+entry:tradeTime.entry,
 
-expiry: tradeTime.expiry,
+expiry:tradeTime.expiry,
 
-time: new Date().toLocaleTimeString(),
+result:"PENDING",
 
-result: "PENDING",
-
-entryPrice: closes[closes.length-1]
+entryPrice:closes[closes.length-1]
 
 });
 
@@ -1077,13 +1075,13 @@ updateSignalResult(
 
 market,
 
-signal,
+historicalDirection,
 
 closes[closes.length-1]
 
 );
 
-}, EXPIRY * 60000);
+}, parseInt(document.getElementById("timeframe").value)*60000);
 
     btn.disabled = false;
     btn.innerHTML = "GENERATE SIGNAL";
