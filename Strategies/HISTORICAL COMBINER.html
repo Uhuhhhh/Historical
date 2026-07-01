@@ -1404,7 +1404,7 @@ async function sha256(text){
 
 const USERS = {
 
-"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b":"DEV-B2PRAY0U",
+"6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b":"DEV-SJUUDW5N",
 
 "6b86b273ff34fce19d6b804eff5a3f5747ada4eaa22f1d49c01e52ddb7875b4b":"DEV-1ITISEAQ",
 
@@ -2070,7 +2070,6 @@ Candle       ${historicalDirection=="CALL" ? "🟢 Strong Bullish" : "🔴 Stron
 `;
 saveSignal({
 
-time:new Date().toLocaleString(),
 
 pair:market,
 
@@ -2080,9 +2079,22 @@ confidence:historicalScore,
 
 entry:tradeTime.entry,
 
-expiry:tradeTime.expiry
+expiry:tradeTime.expiry,
+
+result:"PENDING",
+
+entryPrice:currentPrice
 
 });
+setTimeout(() => {
+
+    updateSignalResult(
+        market,
+        historicalDirection,
+        currentPrice
+    );
+
+}, parseInt(document.getElementById("timeframe").value) * 60000);
 
 btn.disabled=false;
 btn.innerHTML="GENERATE SIGNAL";
@@ -2151,6 +2163,60 @@ sidebar.style.left="0px";
 overlay.style.display="block";
 
 }
+
+}
+
+async function updateSignalResult(pair, signal, entryPrice){
+
+const symbolMap = {
+"AUDCAD":"AUD/CAD",
+"AUDCHF":"AUD/CHF",
+"AUDJPY":"AUD/JPY",
+"AUDUSD":"AUD/USD",
+"CADCHF":"CAD/CHF",
+"CADJPY":"CAD/JPY",
+"CHFJPY":"CHF/JPY",
+"EURAUD":"EUR/AUD",
+"EURCAD":"EUR/CAD",
+"EURCHF":"EUR/CHF",
+"EURGBP":"EUR/GBP",
+"EURJPY":"EUR/JPY",
+"EURUSD":"EUR/USD",
+"GBPAUD":"GBP/AUD",
+"GBPCAD":"GBP/CAD",
+"GBPCHF":"GBP/CHF",
+"GBPJPY":"GBP/JPY",
+"GBPUSD":"GBP/USD",
+"USDCAD":"USD/CAD",
+"USDCHF":"USD/CHF",
+"USDJPY":"USD/JPY"
+};
+
+const symbol = symbolMap[pair];
+
+const response = await fetch(
+`https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1min&outputsize=2&apikey=${API_KEY}`
+);
+
+const data = await response.json();
+
+if(!data.values) return;
+
+const close = parseFloat(data.values[0].close);
+
+let history = JSON.parse(localStorage.getItem("signalHistory")) || [];
+
+const trade = history.find(x=>x.result=="PENDING" && x.pair==pair);
+
+if(!trade) return;
+
+if(signal=="CALL")
+trade.result = close > entryPrice ? "WIN" : "LOSS";
+
+if(signal=="PUT")
+trade.result = close < entryPrice ? "WIN" : "LOSS";
+
+localStorage.setItem("signalHistory", JSON.stringify(history));
 
 }
 
