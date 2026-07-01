@@ -1053,19 +1053,21 @@ function analyzeMarket(candles){
     
     saveSignal({
 
-pair:market,
+pair: String(market),
 
-signal:signal,
+signal: String(signal),
 
-confidence:confidence.toFixed(1),
+confidence: Number(confidence.toFixed(1)),
 
-entry:tradeTime.entry,
+entry: tradeTime.entry,
 
-expiry:tradeTime.expiry,
+expiry: tradeTime.expiry,
 
-result:"PENDING",
+time: new Date().toLocaleTimeString(),
 
-entryPrice:closes[closes.length-1]
+result: "PENDING",
+
+entryPrice: closes[closes.length-1]
 
 });
 
