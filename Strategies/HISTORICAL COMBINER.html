@@ -2168,7 +2168,9 @@ overlay.style.display="block";
 
 async function updateSignalResult(pair, signal, entryPrice){
 
-const symbolMap = {
+try{
+
+const symbolMap={
 "AUDCAD":"AUD/CAD",
 "AUDCHF":"AUD/CHF",
 "AUDJPY":"AUD/JPY",
@@ -2192,34 +2194,40 @@ const symbolMap = {
 "USDJPY":"USD/JPY"
 };
 
-const symbol = symbolMap[pair];
+const symbol=symbolMap[pair];
 
-const response = await fetch(
+if(!symbol) return;
+
+const response=await fetch(
 `https://api.twelvedata.com/time_series?symbol=${symbol}&interval=1min&outputsize=2&apikey=${API_KEY}`
 );
 
-const data = await response.json();
+const data=await response.json();
 
-if(!data.values) return;
+if(!data || !data.values || data.values.length===0) return;
 
-const close = parseFloat(data.values[0].close);
+const close=parseFloat(data.values[0].close);
 
-let history = JSON.parse(localStorage.getItem("signalHistory")) || [];
+let history=JSON.parse(localStorage.getItem("signalHistory"))||[];
 
-const trade = history.find(x=>x.result=="PENDING" && x.pair==pair);
+const index=history.findIndex(x=>x.result==="PENDING" && x.pair===pair);
 
-if(!trade) return;
+if(index===-1) return;
 
-if(signal=="CALL")
-trade.result = close > entryPrice ? "WIN" : "LOSS";
+history[index].result=
+signal==="CALL"
+? (close>entryPrice?"WIN":"LOSS")
+: (close<entryPrice?"WIN":"LOSS");
 
-if(signal=="PUT")
-trade.result = close < entryPrice ? "WIN" : "LOSS";
+localStorage.setItem("signalHistory",JSON.stringify(history));
 
-localStorage.setItem("signalHistory", JSON.stringify(history));
+}catch(err){
+
+console.error("Result Update Error:",err);
 
 }
 
+}
 function startCooldown(minutes){
 
     let seconds =
